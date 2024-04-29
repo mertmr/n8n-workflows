@@ -1,0 +1,339 @@
+{
+  "active": true,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Crypto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase1": {
+      "main": [
+        [
+          {
+            "node": "Brevo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-04-29T04:44:53.655Z",
+  "id": "D6sQAlmnBtzvUhtN",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      },
+      "id": "a9d25952-12cf-4ccb-bbe6-f8cf6b1bd3de",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.schengenvisaappointments.com/api/visa-list/",
+        "options": {}
+      },
+      "id": "a48d3a32-6a8e-45ce-9219-499df1675dcb",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "9603d120-ddf9-4168-ba97-e723a620d048",
+              "leftValue": "={{ $json.appointment_date }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "0d3ff5da-b402-4f89-8b76-0001afa53275",
+              "leftValue": "={{ $json.source_country }}",
+              "rightValue": "United Arab Emirates",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "56b9dfc6-7131-4b41-808a-6ce4e1d5f856",
+      "name": "Filter",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        660,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Initialize the email body variable\nlet emailBody = '';\n\n// Get the input data from the previous node\nconst inputJsonData = items[0].json;\n\n// Loop through each entry in the input JSON data\nitems.forEach((item) => {\n  const data = item.json;\n  emailBody += `Source Country: ${data.source_country}\\n`;\n  emailBody += `Mission Country: ${data.mission_country}\\n`;\n  emailBody += `Appointment Date: ${data.appointment_date}\\n`;\n  emailBody += `Book Now: ${data.book_now_link}\\n\\n`;\n});\n\n// Return the email body as a single string variable in the items array\nreturn [{json: { emailBody }}];"
+      },
+      "id": "f0f07dee-aac6-4cd6-996b-a08da15c1f9d",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "value": "={{ $json.emailBody }}",
+        "dataPropertyName": "hashed_data"
+      },
+      "id": "c2e4cee1-be86-4b56-b8bb-c8cf191f7899",
+      "name": "Crypto",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        220,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "visa_hash",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "1"
+            }
+          ]
+        }
+      },
+      "id": "d032c04a-9644-4004-849e-0441a8c0bd60",
+      "name": "Supabase",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        440,
+        520
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6hkQ5HhjDcu5LT4C",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "d7a01887-83e9-40b3-9a31-86826c09bff6",
+              "leftValue": "={{ $json.hash }}",
+              "rightValue": "={{ $('Crypto').item.json.hashed_data }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "fa161257-7eba-4c19-8e3f-3c019d024d69",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        660,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "visa_hash",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "1"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "hash",
+              "fieldValue": "={{ $('Crypto').item.json.hashed_data }}"
+            }
+          ]
+        }
+      },
+      "id": "0e8a03d0-eb3a-4206-84ec-4341008cdc89",
+      "name": "Supabase1",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        880,
+        520
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6hkQ5HhjDcu5LT4C",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "subject": "New Appointments",
+        "textContent": "={{ $('Code').item.json.emailBody }}",
+        "sender": "mertmr@gmail.com",
+        "receipients": "mertmr@gmail.com",
+        "additionalFields": {}
+      },
+      "id": "3e07bbe3-fdf8-4e1f-bce6-ae89071c6536",
+      "name": "Brevo",
+      "type": "n8n-nodes-base.sendInBlue",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        520
+      ],
+      "credentials": {
+        "sendInBlueApi": {
+          "id": "5PmtV8hGwOTSU1in",
+          "name": "Brevo account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrencyRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2024-04-29T05:02:53.000Z",
+  "versionId": "454d0509-ce0e-491b-a209-3624d18869a8"
+}
