@@ -103,8 +103,7 @@
         "rule": {
           "interval": [
             {
-              "field": "minutes",
-              "minutesInterval": 30
+              "field": "minutes"
             }
           ]
         }
@@ -304,7 +303,7 @@
         "subject": "New Appointments",
         "textContent": "={{ $('Code').item.json.emailBody }}",
         "sender": "mertmr@gmail.com",
-        "receipients": "mertmr@gmail.com",
+        "receipients": "mertmr@gmail.com, rajthakurabroad@gmail.com",
         "additionalFields": {}
       },
       "id": "3e07bbe3-fdf8-4e1f-bce6-ae89071c6536",
@@ -334,6 +333,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2024-04-29T05:02:53.000Z",
-  "versionId": "454d0509-ce0e-491b-a209-3624d18869a8"
+  "updatedAt": "2024-04-29T05:59:25.000Z",
+  "versionId": "545350e3-96e8-4d46-ae62-a14a52fd4506"
 }
