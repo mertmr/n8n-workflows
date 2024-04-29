@@ -1,5 +1,5 @@
 {
-  "active": false,
+  "active": true,
   "connections": {
     "n8n": {
       "main": [
@@ -326,8 +326,8 @@
       "typeVersion": 1,
       "credentials": {
         "githubApi": {
-          "id": "Go4DDnVnBj5vL83O",
-          "name": "GitHub account"
+          "id": "gIAP3lum70GJXH8E",
+          "name": "GitHub account 2"
         }
       }
     },
@@ -359,7 +359,7 @@
             },
             {
               "name": "repo.path",
-              "value": "workflows/"
+              "value": "workflows/mert.json"
             }
           ]
         },
@@ -489,7 +489,7 @@
   },
   "staticData": null,
   "tags": [],
-  "triggerCount": 0,
-  "updatedAt": "2024-04-29T05:36:22.000Z",
-  "versionId": "d7b316f8-519c-4b5b-a9a3-37bc132ccdb0"
+  "triggerCount": 1,
+  "updatedAt": "2024-04-29T05:42:49.000Z",
+  "versionId": "00b7f40a-b8af-4a63-9a74-08581fdf9a25"
 }
