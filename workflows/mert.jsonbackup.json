@@ -302,8 +302,8 @@
       "typeVersion": 1,
       "credentials": {
         "githubApi": {
-          "id": "Go4DDnVnBj5vL83O",
-          "name": "GitHub account"
+          "id": "gIAP3lum70GJXH8E",
+          "name": "GitHub account 2"
         }
       }
     },
@@ -490,6 +490,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2024-04-29T05:42:49.000Z",
-  "versionId": "00b7f40a-b8af-4a63-9a74-08581fdf9a25"
+  "updatedAt": "2024-04-29T05:44:50.000Z",
+  "versionId": "afb7c81e-0a87-4d53-9a9e-5cbdef7a5e8e"
 }
