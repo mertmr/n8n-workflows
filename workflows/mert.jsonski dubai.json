@@ -5,7 +5,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request",
+            "node": "Code1",
             "type": "main",
             "index": 0
           }
@@ -78,6 +78,17 @@
           }
         ]
       ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2024-05-07T04:15:26.640Z",
@@ -109,7 +120,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api-prod.maflec.com/global-snow/v1/viva/rest-search-calender-availability/SNOWBOARD,ADULT,LEVEL1/2024-06-01/2024-06-30/true",
+        "url": "={{ $json.url }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -134,7 +145,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        440,
+        660,
         260
       ]
     },
@@ -285,6 +296,19 @@
           "name": "Brevo account"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get current date\nvar currentDate = new Date();\n\n// Get last day of current month\nvar lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);\nvar lastDayFormatted = lastDayOfMonth.toISOString().slice(0,10);\n\n// Get first day of current month\nvar firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);\nvar firstDayFormatted = firstDayOfMonth.toISOString().slice(0,10);\n\nlet url = \"https://api-prod.maflec.com/global-snow/v1/viva/rest-search-calender-availability/SNOWBOARD,ADULT,LEVEL1/\" + firstDayFormatted + \"/\" + lastDayFormatted + \"/true\";\nconsole.log(url)\nreturn {url};"
+      },
+      "id": "ccba47c1-21e3-433d-b185-55de1f16b9eb",
+      "name": "Code1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        260
+      ]
     }
   ],
   "pinData": {},
@@ -298,6 +322,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2024-05-27T12:09:55.000Z",
-  "versionId": "3b31225a-4beb-4397-95dc-0c97e2b745c1"
+  "updatedAt": "2024-05-27T12:24:57.000Z",
+  "versionId": "1c0c4de9-2b95-41c3-993a-f4399285bf5f"
 }
