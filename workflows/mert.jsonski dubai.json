@@ -1,5 +1,5 @@
 {
-  "active": false,
+  "active": true,
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -13,17 +13,6 @@
       ]
     },
     "HTTP Request": {
-      "main": [
-        [
-          {
-            "node": "Filter",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Filter": {
       "main": [
         [
           {
@@ -120,7 +109,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api-prod.maflec.com/global-snow/v1/viva/rest-search-calender-availability/SNOWBOARD,ADULT,LEVEL1/2024-05-01/2024-05-31/true",
+        "url": "https://api-prod.maflec.com/global-snow/v1/viva/rest-search-calender-availability/SNOWBOARD,ADULT,LEVEL1/2024-06-01/2024-06-30/true",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -151,49 +140,7 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict"
-          },
-          "conditions": [
-            {
-              "id": "9603d120-ddf9-4168-ba97-e723a620d048",
-              "leftValue": "={{ $json.appointment_date }}",
-              "rightValue": "",
-              "operator": {
-                "type": "string",
-                "operation": "exists",
-                "singleValue": true
-              }
-            },
-            {
-              "id": "0d3ff5da-b402-4f89-8b76-0001afa53275",
-              "leftValue": "={{ $json.source_country }}",
-              "rightValue": "United Arab Emirates",
-              "operator": {
-                "type": "string",
-                "operation": "equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "01e6b399-97cd-4b47-9bed-7a135a2a9610",
-      "name": "Filter",
-      "type": "n8n-nodes-base.filter",
-      "typeVersion": 2,
-      "position": [
-        660,
-        260
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "// Initialize the email body variable\nlet emailBody = '';\n\n// Get the input data from the previous node\nconst inputJsonData = items[0].json;\n\n// Loop through each entry in the input JSON data\nitems.forEach((item) => {\n  const data = item.json;\n  emailBody += `Source Country: ${data.source_country}\\n`;\n  emailBody += `Mission Country: ${data.mission_country}\\n`;\n  emailBody += `Appointment Date: ${data.appointment_date}\\n`;\n  emailBody += `Book Now: ${data.book_now_link}\\n\\n`;\n});\n\n// Return the email body as a single string variable in the items array\nreturn [{json: { emailBody }}];"
+        "jsCode": "// Initialize the email body variable\nlet emailBody = '';\n\n// Get the input data from the previous node\nconst inputJsonData = items[0].json.dayList;\n  console.log(inputJsonData)\n\n// Loop through each entry in the input JSON data\ninputJsonData.forEach((item) => {\n  emailBody += `Max Availability: ${item.maxAvailability}\\n`;\n  emailBody += `Date: ${item.date}\\n\\n\\n`;\n});\n\n// Return the email body as a single string variable in the items array\nreturn [{json: { emailBody }}];"
       },
       "id": "a2ec91fe-5514-40bc-b336-ae05b70b0f7d",
       "name": "Code",
@@ -226,7 +173,7 @@
           "conditions": [
             {
               "keyName": "id",
-              "keyValue": "1"
+              "keyValue": "2"
             }
           ]
         }
@@ -288,7 +235,7 @@
             {
               "keyName": "id",
               "condition": "eq",
-              "keyValue": "1"
+              "keyValue": "2"
             }
           ]
         },
@@ -318,10 +265,10 @@
     },
     {
       "parameters": {
-        "subject": "New Appointments",
+        "subject": "Ski Dubai - New Appointments",
         "textContent": "={{ $('Code').item.json.emailBody }}",
         "sender": "mertmr@gmail.com",
-        "receipients": "mertmr@gmail.com, rajthakurabroad@gmail.com",
+        "receipients": "mertmr@gmail.com",
         "additionalFields": {}
       },
       "id": "2cf0cc72-642d-4c63-8472-70e58494d7ff",
@@ -351,6 +298,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2024-05-07T04:33:28.000Z",
-  "versionId": "fe291634-ae8d-46c0-9260-8a624cc633a2"
+  "updatedAt": "2024-05-27T12:09:55.000Z",
+  "versionId": "3b31225a-4beb-4397-95dc-0c97e2b745c1"
 }
