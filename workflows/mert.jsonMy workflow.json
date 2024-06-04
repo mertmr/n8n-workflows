@@ -1,5 +1,5 @@
 {
-  "active": false,
+  "active": true,
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -160,9 +160,19 @@
               }
             },
             {
-              "id": "6a27f397-0274-405b-a798-e242f2e92c56",
+              "id": "a7ebb81b-9bab-48e9-8973-78b05c4a4c23",
+              "leftValue": "={{ $json.mission_country }}",
+              "rightValue": "Italy",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "a293382f-fd3f-4ab3-a4b2-51daeb9882ce",
               "leftValue": "={{ $json.center_name }}",
-              "rightValue": "Netherlands Visa Application Center-Abu Dhabi",
+              "rightValue": "Italy Visa Application Center ,Dubai",
               "operator": {
                 "type": "string",
                 "operation": "equals",
@@ -343,6 +353,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2024-05-27T12:07:46.000Z",
-  "versionId": "d0c905e2-927d-4759-bb15-1b76499f85da"
+  "updatedAt": "2024-06-04T10:23:16.000Z",
+  "versionId": "b9204440-c110-48f4-9b12-7cfa1ea295b4"
 }
