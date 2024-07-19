@@ -186,7 +186,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Initialize the email body variable\nlet emailBody = '';\n\n// Get the input data from the previous node\nconst inputJsonData = items[0].json;\n\n// Loop through each entry in the input JSON data\nitems.forEach((item) => {\n  const data = item.json;\n  emailBody += `Source Country: ${data.source_country}\\n`;\n  emailBody += `Mission Country: ${data.mission_country}\\n`;\n  emailBody += `Appointment Date: ${data.appointment_date}\\n`;\n  emailBody += `Center: ${data.center_name}\\n`;\n  emailBody += `Book Now: ${data.book_now_link}\\n\\n`;\n});\n\n// Return the email body as a single string variable in the items array\nreturn [{json: { emailBody }}];"
+        "jsCode": "// Initialize the email body variable\nlet emailBody = '';\n\n// Get the input data from the previous node\nconst inputJsonData = items[0].json;\n\n// Loop through each entry in the input JSON data\nitems.forEach((item) => {\n  const data = item.json;\n  emailBody += `Source Country: ${data.source_country}\\n`;\n  emailBody += `Mission Country: ${data.mission_country}\\n`;\n  emailBody += `Appointment Date: ${data.appointment_date}\\n`;\n  emailBody += `Center: ${data.center_name}\\n`;\n  emailBody += `Visa Category: ${data.visa_category}\\n`;\n  emailBody += `Visa Sub Category: ${data.visa_subcategory}\\n`;\n  emailBody += `Book Now: ${data.book_now_link}\\n\\n`;\n});\n\n// Return the email body as a single string variable in the items array\nreturn [{json: { emailBody }}];"
       },
       "id": "3ab1e61b-ad16-4ae8-ab9e-01af32117db8",
       "name": "Code",
@@ -314,7 +314,7 @@
         "subject": "New Appointments",
         "textContent": "={{ $('Code').item.json.emailBody }}",
         "sender": "mertmr@gmail.com",
-        "receipients": "mertmr@gmail.com, rajthakurabroad@gmail.com",
+        "receipients": "mertmr@gmail.com, e.havvacelik@gmail.com",
         "additionalFields": {}
       },
       "id": "6a65df21-2fbd-4823-a935-214409b7b309",
@@ -354,7 +354,7 @@
             {
               "id": "fb993c1d-0dfa-4cc3-8915-bfe50bdf319c",
               "leftValue": "={{ $json.mission_country }}",
-              "rightValue": "Italy",
+              "rightValue": "France",
               "operator": {
                 "type": "string",
                 "operation": "equals",
@@ -387,6 +387,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2024-06-11T07:32:11.000Z",
-  "versionId": "cc791354-17b2-4246-9fda-b14b07defa9d"
+  "updatedAt": "2024-07-18T17:31:36.000Z",
+  "versionId": "9a7b1298-367f-4baa-83d8-0b15c19ad915"
 }
