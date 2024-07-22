@@ -1,0 +1,392 @@
+{
+  "active": true,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Crypto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase1": {
+      "main": [
+        [
+          {
+            "node": "Brevo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-07-22T06:30:30.279Z",
+  "id": "gRwzPWJxbMdnWEWy",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Raj Swiss and France",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "id": "058e5a47-4e3b-4faf-b3cd-aca85dfaed40",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.schengenvisaappointments.com/api/visa-list/",
+        "options": {}
+      },
+      "id": "a2ad30bb-f542-4782-9855-2cecea446448",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "9603d120-ddf9-4168-ba97-e723a620d048",
+              "leftValue": "={{ $json.appointment_date }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "0d3ff5da-b402-4f89-8b76-0001afa53275",
+              "leftValue": "={{ $json.source_country }}",
+              "rightValue": "United Arab Emirates",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a4b33d29-eb03-4563-91a8-4c78c714f46f",
+      "name": "Filter",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        660,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Initialize the email body variable\nlet emailBody = '';\n\n// Get the input data from the previous node\nconst inputJsonData = items[0].json;\n\n// Loop through each entry in the input JSON data\nitems.forEach((item) => {\n  const data = item.json;\n  emailBody += `Source Country: ${data.source_country}\\n`;\n  emailBody += `Mission Country: ${data.mission_country}\\n`;\n  emailBody += `Appointment Date: ${data.appointment_date}\\n`;\n  emailBody += `Center: ${data.center_name}\\n`;\n  emailBody += `Visa Category: ${data.visa_category}\\n`;\n  emailBody += `Visa Sub Category: ${data.visa_subcategory}\\n`;\n  emailBody += `Book Now: ${data.book_now_link}\\n\\n`;\n});\n\n// Return the email body as a single string variable in the items array\nreturn [{json: { emailBody }}];"
+      },
+      "id": "751c7bb9-eae7-4fe3-9f11-9e158c9d77a0",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1060,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "value": "={{ $json.emailBody }}",
+        "dataPropertyName": "hashed_data"
+      },
+      "id": "e088e59e-2da7-4d4d-b66c-79282ca4c11e",
+      "name": "Crypto",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        220,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "visa_hash",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "1"
+            }
+          ]
+        }
+      },
+      "id": "db8e474f-e4f3-40b9-ac68-59f453a1c544",
+      "name": "Supabase",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        440,
+        520
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6hkQ5HhjDcu5LT4C",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "d7a01887-83e9-40b3-9a31-86826c09bff6",
+              "leftValue": "={{ $json.hash }}",
+              "rightValue": "={{ $('Crypto').item.json.hashed_data }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a90d645f-19f5-4bec-a3a6-ecccabe10010",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        660,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "visa_hash",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "1"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "hash",
+              "fieldValue": "={{ $('Crypto').item.json.hashed_data }}"
+            }
+          ]
+        }
+      },
+      "id": "c37d06d0-c9f4-4783-ad63-da3c980d15bb",
+      "name": "Supabase1",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        880,
+        520
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6hkQ5HhjDcu5LT4C",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "subject": "New Appointments",
+        "textContent": "={{ $('Code').item.json.emailBody }}",
+        "sender": "mertmr@gmail.com",
+        "receipients": "rajthakurabroad@gmail.com",
+        "additionalFields": {}
+      },
+      "id": "62582590-9653-4896-826b-aeb8367d0062",
+      "name": "Brevo",
+      "type": "n8n-nodes-base.sendInBlue",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        520
+      ],
+      "credentials": {
+        "sendInBlueApi": {
+          "id": "5PmtV8hGwOTSU1in",
+          "name": "Brevo account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "8540e656-8e41-4753-8259-3b027cc5e0e4",
+              "leftValue": "={{ $json.mission_country }}",
+              "rightValue": "Switzerland",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "fb993c1d-0dfa-4cc3-8915-bfe50bdf319c",
+              "leftValue": "={{ $json.mission_country }}",
+              "rightValue": "France",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "ca7758ad-6d4b-4fb0-97ca-ebf996170996",
+      "name": "Filter1",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        860,
+        260
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrencyRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2024-07-22T06:32:58.000Z",
+  "versionId": "b8a01df9-0054-44ff-8d54-ba5e2cfd6054"
+}
